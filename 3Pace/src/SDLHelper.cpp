@@ -2,6 +2,7 @@
 
 constexpr SDL_GLprofile OPENGL_PROFILE = SDL_GLprofile::SDL_GL_CONTEXT_PROFILE_CORE;
 
+GLuint vertexbuffer;
 SDLHelper::SDLHelper(std::string title, int x, int y, int w, int h) {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		throw std::runtime_error(std::string("Couldn't initialize SDL: ") + std::string(SDL_GetError()));
@@ -13,20 +14,35 @@ SDLHelper::SDLHelper(std::string title, int x, int y, int w, int h) {
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2))
 		throw std::runtime_error("Couldn't set OpenGL minor version: " + std::string(SDL_GetError()));
 
+	// Create Window
 	mDisplayWindow = SDL_CreateWindow(title.c_str(), x, y, w, h, SDL_WINDOW_OPENGL);
 	if (mDisplayWindow == nullptr)
 		throw std::runtime_error("Couldn't create window: " + std::string(SDL_GetError()));
 
+	// Get Window Context
 	mGlContext = SDL_GL_CreateContext(mDisplayWindow);
 	if (mGlContext == nullptr)
 		throw std::runtime_error("Couldn't create display context: " + std::string(SDL_GetError()));
+
+	// Initialize GLEW
+	glewExperimental = GL_TRUE;
+	if (glewInit() != GLEW_OK)
+		throw std::runtime_error("Couldn't initialize GLEW");
+
+	if (SDL_GL_SetSwapInterval(1) < 0)
+		throw std::runtime_error("Couldn't enable VSync");
+
+	// Create program object to bind shaders on it
+	if ((mProgramID = glCreateProgram()) == 0)
+		throw std::runtime_error("Couldn't create OpenGL program object");
 
 	mRunning = true;
 
 	glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
 }
 
-	
+
+
 void SDLHelper::loop() {
 	SDL_Event event;
 
@@ -38,14 +54,31 @@ void SDLHelper::loop() {
 				break;
 			}
 		}
-
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+		// Render
+		/*
+		glEnableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+		glVertexAttribPointer(
+			    0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+			    3,                  // size
+			    GL_FLOAT,           // type
+			    GL_FALSE,           // normalized?
+			    0,                  // stride
+			    (void*)0            // array buffer offset
+			);
+		glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
+		glDisableVertexAttribArray(0);*/
+
+		// Render End
+
 		SDL_GL_SwapWindow(mDisplayWindow);
 	}
 }
 
-SDLHelper::~SDLHelper()
-{
+SDLHelper::~SDLHelper() {
 	SDL_DestroyWindow(mDisplayWindow);
 	SDL_GL_DeleteContext(mGlContext);
 	SDL_Quit();

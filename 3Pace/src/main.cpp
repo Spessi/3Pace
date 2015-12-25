@@ -3,7 +3,6 @@
 #include "SDLHelper.h"
 
 
-
 int main() {
 	try {
 		std::unique_ptr<SDLHelper> helper(new SDLHelper("Test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 512, 512));
