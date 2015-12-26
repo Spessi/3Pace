@@ -6,6 +6,9 @@ GLuint vertexbuffer;
 SDLHelper::SDLHelper(std::string title, int x, int y, int w, int h) {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		throw std::runtime_error(std::string("Couldn't initialize SDL: ") + std::string(SDL_GetError()));
+	
+	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
+		throw std::runtime_error("Couldn't initialize SDL2 Image: " + std::string(SDL_GetError()));
 
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, OPENGL_PROFILE))
 		throw std::runtime_error("Couldn't set OpenGL profile mask: " + std::string(SDL_GetError()));
@@ -37,11 +40,8 @@ SDLHelper::SDLHelper(std::string title, int x, int y, int w, int h) {
 		throw std::runtime_error("Couldn't create OpenGL program object");
 
 	mRunning = true;
-
 	glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
 }
-
-
 
 void SDLHelper::loop() {
 	SDL_Event event;
@@ -54,26 +54,11 @@ void SDLHelper::loop() {
 				break;
 			}
 		}
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
 		// Render
-		/*
-		glEnableVertexAttribArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-		glVertexAttribPointer(
-			    0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-			    3,                  // size
-			    GL_FLOAT,           // type
-			    GL_FALSE,           // normalized?
-			    0,                  // stride
-			    (void*)0            // array buffer offset
-			);
-		glDrawArrays(GL_TRIANGLES, 0, 3); // Starting from vertex 0; 3 vertices total -> 1 triangle
-		glDisableVertexAttribArray(0);*/
-
+		// todo...
 		// Render End
-
 		SDL_GL_SwapWindow(mDisplayWindow);
 	}
 }

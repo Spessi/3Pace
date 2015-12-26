@@ -1,12 +1,12 @@
 #pragma once
-#include <string>
 #include <SDL.h>
+#include <SDL_image.h>
 #undef main
 #include <gl/glew.h>
 #include <SDL_opengl.h>
-#include <exception>
 #include <iostream>
-
+#include <string>
+#include <exception>
 class SDLHelper {
 public:
 	SDLHelper(std::string title, int x, int y, int w, int h);

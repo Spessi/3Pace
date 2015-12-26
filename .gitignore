@@ -232,7 +232,7 @@ _Pvt_Extensions
 .fake/
 
 
-
+*.dll
 3Pace/ext/*
 !3Pace/ext/readme.txt
 
