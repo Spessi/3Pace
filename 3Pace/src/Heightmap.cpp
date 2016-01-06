@@ -19,9 +19,7 @@ bool Heightmap::loadFromFile(std::string path) {
 
 	// Get Pixel data
 	Uint8* pixels = (Uint8*)img->pixels;
-
-	GLfloat offset = -0.5f;
-
+	
 	// Load vertices into vector
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
