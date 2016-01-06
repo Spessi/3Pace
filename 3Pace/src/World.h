@@ -6,6 +6,7 @@
 #include "ShaderProgram.h"
 #include "Camera.h"
 #include "SDLHelper.h"
+#include "Heightmap.h"
 
 class World {
 public:

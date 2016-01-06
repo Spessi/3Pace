@@ -58,6 +58,7 @@ void World::loadCube() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
+Heightmap heightmap;
 World::World() {
 	// Load all shaders
 	std::vector<Shader> shaders;
@@ -66,9 +67,9 @@ World::World() {
 	m_ShaderProg = new ShaderProgram(shaders);
 
 	// Set up the camera
-	m_Camera = new Camera(glm::vec3(0.0f, 0.0f, 10.0f), 180.0f, 0.0f, 0.1f, 100.0f, 16.0f/9.0f, true, 3.1f, 5.0f);
+	m_Camera = new Camera(glm::vec3(0.0f, 1.8f, 0.0f), 180.0f, 0.0f, 0.1f, 1000.0f, 16.0f/9.0f, true, 30.0f, 5.0f);
 
-	loadCube();
+	heightmap.loadFromFile("heightmap.png");
 }
 
 World::~World() {
@@ -100,13 +101,17 @@ void World::render() {
 	GLuint projectionLoc = glGetUniformLocation(m_ShaderProg->getProgramID(), "projection");
 	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(m_Camera->getProjectionMatrix()));
 	GLuint modelviewLoc = glGetUniformLocation(m_ShaderProg->getProgramID(), "modelview");
-	glUniformMatrix4fv(modelviewLoc, 1, GL_FALSE, glm::value_ptr(m_Camera->getViewMatrix() * modelMatrix));
+
 
 
 	glBindVertexArray(gVAO);
 	// draw the VAO
 	glDrawArrays(GL_TRIANGLES, 0, 24);
 	glBindVertexArray(0);
+
+	modelMatrix = glm::mat4();
+	glUniformMatrix4fv(modelviewLoc, 1, GL_FALSE, glm::value_ptr(m_Camera->getViewMatrix() * modelMatrix));
+	heightmap.draw();
 
 	glUseProgram(0);
 }

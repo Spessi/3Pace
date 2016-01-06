@@ -15,6 +15,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+struct Vertex {
+	glm::vec3 position;
+	glm::vec3 normal;
+};
+
 class SDLHelper {
 public:
 	SDLHelper(std::string title, int x, int y, int w, int h);
