@@ -6,32 +6,45 @@ Camera::Camera() : m_Position(0.0f, 0.0f, 0.0f), m_HorizontalAngle(0.0f), m_Vert
 
 }
 
-Camera::Camera(glm::vec3 pos, GLfloat horiAngle, GLfloat vertAngle, GLboolean constrainVertical, GLfloat movementSpeed, GLfloat mouseIntensity) {
+Camera::Camera(glm::vec3 pos, GLfloat horiAngle, GLfloat vertAngle, GLfloat farclip, GLfloat nearclip, GLfloat ratio, GLboolean constrainVertical, GLfloat movementSpeed, GLfloat mouseIntensity) {
 	m_Position = pos;
 	m_HorizontalAngle = horiAngle;
 	m_VerticalAngle = vertAngle;
+	m_FarClip = farclip;
+	m_NearClip = nearclip;
+	m_AspectRatio = ratio;
+
 	m_ConstrainVertical = constrainVertical;
 	m_MovementSpeed = movementSpeed;
 	m_MouseIntensity = mouseIntensity;
 }
 
-void Camera::processKeyboard(SDL_Keycode key, GLfloat dt) {
+void Camera::setAspectRatio(GLfloat ratio) {
+	if(ratio > 0.0f)
+		m_AspectRatio = ratio;
+}
+
+void Camera::processKeyboard(GLfloat dt) {
 	GLfloat speed = m_MovementSpeed * dt;
+	const Uint8* state = SDL_GetKeyboardState(NULL);
 	
-	if (key == SDLK_w || key == SDLK_UP)
+	if (state[SDL_SCANCODE_W] || state[SDL_SCANCODE_UP])
 		m_Position += getFrontVector() * speed;
 
-	if(key == SDLK_s || key == SDLK_DOWN)
+	if(state[SDL_SCANCODE_S] || state[SDL_SCANCODE_DOWN])
 		m_Position -= getFrontVector() * speed;
 
-	if (key == SDLK_a || key == SDLK_LEFT)
+	if (state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT])
 		m_Position -= getRightVector() * speed;
 
-	if (key == SDLK_d || key == SDLK_RIGHT)
+	if (state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT])
 		m_Position += getRightVector() * speed;
 }
 
-void Camera::processMouse(int dx, int dy, GLfloat dt) {
+void Camera::processMouse(GLfloat dt) {
+	int dx, dy;
+	SDL_GetRelativeMouseState(&dx, &dy);
+
 	GLfloat intensity = m_MouseIntensity * dt;
 
 	m_HorizontalAngle -= (GLfloat)dx * intensity;
@@ -66,6 +79,10 @@ glm::vec3 Camera::getRightVector() const {
 
 glm::vec3 Camera::getUpVector() const {
 	return glm::cross(getRightVector(), getFrontVector());
+}
+
+glm::mat4 Camera::getProjectionMatrix() {
+	return glm::perspective(glm::radians(45.0f), m_AspectRatio, m_NearClip, m_FarClip);
 }
 
 glm::mat4 Camera::getViewMatrix() const {

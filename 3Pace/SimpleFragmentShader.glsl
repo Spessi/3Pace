@@ -1,8 +1,7 @@
 #version 330 core
 
-smooth in vec3 theColor;
-out vec4 LFragment;
+out vec4 color;
 
 void main() {
-	LFragment = vec4( theColor, 1.0 );
+	color = vec4(1.0);
 }

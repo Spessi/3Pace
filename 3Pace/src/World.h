@@ -11,20 +11,16 @@ class World {
 public:
 	World();
 	~World();
-	void processKeyboard(SDL_Keycode key);
 	void process(GLfloat delta);
 	void render();
 	const ShaderProgram* getShaderProg() const;
-	void setProjectionMatrix(glm::mat4 mat);
+	Camera* getCamera();
 
 private:
 	ShaderProgram* m_ShaderProg;
 	Camera* m_Camera;
-	glm::mat4 m_ProjectionMatrix;
 	GLfloat m_Delta;
 
-	// Test
-	float m_Angle = 0.0f, m_Angle2 = 0;
-	void loadCube();
+	void World::loadCube();
 };
 

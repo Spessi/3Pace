@@ -15,19 +15,24 @@ public:
 		RIGHT
 	};
 	Camera();
-	Camera(glm::vec3 pos, GLfloat horiAngle, GLfloat vertAngle, GLboolean constrainVertical, GLfloat movementSpeed, GLfloat mouseIntensity);
+	Camera(glm::vec3 pos, GLfloat horiAngle, GLfloat vertAngle, GLfloat farclip, GLfloat nearclip, GLfloat ratio, GLboolean constrainVertical = true, GLfloat movementSpeed = 1.0f, GLfloat mouseIntensity = 1.0f);
 	~Camera();
+	void setAspectRatio(GLfloat ratio);
+	glm::mat4 getProjectionMatrix();
 	glm::mat4 getViewMatrix() const;
-	void processKeyboard(SDL_Keycode key, GLfloat dt);
-	void processMouse(int dx, int dy, GLfloat dt);
-
 	const GLfloat getHorizontalAngle() const;
 	const GLfloat getVerticalAngle() const;
+	void processKeyboard(GLfloat dt);
+	void processMouse(GLfloat dt);
+
 
 private:
 	glm::vec3 m_Position;
 	GLfloat m_HorizontalAngle;
 	GLfloat m_VerticalAngle;
+	GLfloat m_FarClip;
+	GLfloat m_NearClip;
+	GLfloat m_AspectRatio;
 	GLboolean m_ConstrainVertical;
 	GLfloat m_MovementSpeed;
 	GLfloat m_MouseIntensity;

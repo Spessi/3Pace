@@ -46,14 +46,12 @@ void Game::handleEvents() {
 
 			if (key == SDLK_ESCAPE)
 				m_Running = false;
-			else
-				m_World->processKeyboard(event.key.keysym.sym);
 		}
 	}
 }
 
 void Game::resize(int w, int h) {
-	m_World->setProjectionMatrix(glm::perspective(glm::radians(45.0f), (float)w/(float)h, 0.1f, 100.0f));
+	m_World->getCamera()->setAspectRatio((float)w / (float)h);
 }
 
 World* Game::getWorld() {
