@@ -2,11 +2,14 @@
 #include <iostream>
 
 
-Camera::Camera() : m_Position(0.0f, 0.0f, 0.0f), m_HorizontalAngle(0.0f), m_VerticalAngle(0.0f) {
+Camera::Camera() {
 
 }
 
-Camera::Camera(glm::vec3 pos, GLfloat horiAngle, GLfloat vertAngle, GLfloat farclip, GLfloat nearclip, GLfloat ratio, GLboolean constrainVertical, GLfloat movementSpeed, GLfloat mouseIntensity) {
+Camera::~Camera() {
+}
+
+bool Camera::init(glm::vec3 pos, GLfloat horiAngle, GLfloat vertAngle, GLfloat nearclip, GLfloat farclip, GLfloat ratio, GLboolean constrainVertical, GLfloat movementSpeed, GLfloat mouseIntensity) {
 	m_Position = pos;
 	m_HorizontalAngle = horiAngle;
 	m_VerticalAngle = vertAngle;
@@ -17,6 +20,8 @@ Camera::Camera(glm::vec3 pos, GLfloat horiAngle, GLfloat vertAngle, GLfloat farc
 	m_ConstrainVertical = constrainVertical;
 	m_MovementSpeed = movementSpeed;
 	m_MouseIntensity = mouseIntensity;
+
+	return true;
 }
 
 void Camera::setAspectRatio(GLfloat ratio) {
@@ -39,6 +44,9 @@ void Camera::processKeyboard(GLfloat dt) {
 
 	if (state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT])
 		m_Position += getRightVector() * speed;
+
+	if (state[SDL_SCANCODE_SPACE])
+		m_Position += getUpVector() * speed;
 }
 
 void Camera::processMouse(GLfloat dt) {
@@ -87,7 +95,4 @@ glm::mat4 Camera::getProjectionMatrix() {
 
 glm::mat4 Camera::getViewMatrix() const {
 	return glm::lookAt(m_Position, m_Position + getFrontVector(), getUpVector());
-}
-
-Camera::~Camera() {
 }

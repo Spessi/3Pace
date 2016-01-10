@@ -1,7 +1,13 @@
 #include "Shader.h"
 
 
-Shader::Shader(const std::string& path, GLenum shaderType) {
+Shader::Shader() {
+}
+
+Shader::~Shader() {
+}
+
+bool Shader::load(const std::string& path, GLenum shaderType) {
 	std::string shaderCode = loadFromFile(path);
 
 	m_ShaderID = glCreateShader(shaderType);
@@ -11,10 +17,8 @@ Shader::Shader(const std::string& path, GLenum shaderType) {
 	const GLchar* vertexSourcePointer = shaderCode.c_str();
 	glShaderSource(m_ShaderID, 1, &vertexSourcePointer, 0);
 	glCompileShader(m_ShaderID);
-}
 
-
-Shader::~Shader() {
+	return true;
 }
 
 const GLuint Shader::getShaderID() const {

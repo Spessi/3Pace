@@ -12,6 +12,7 @@ class World {
 public:
 	World();
 	~World();
+	bool init();
 	void process(GLfloat delta);
 	void render();
 	const ShaderProgram* getShaderProg() const;
@@ -20,8 +21,9 @@ public:
 private:
 	ShaderProgram* m_ShaderProg;
 	Camera* m_Camera;
-	GLfloat m_Delta;
+	Heightmap m_Heightmap;
 
-	void World::loadCube();
+	GLfloat m_Delta;
+	GLboolean m_DrawWireframe;
 };
 

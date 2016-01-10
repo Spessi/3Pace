@@ -1,11 +1,21 @@
 #include "Game.h"
 
-Game::Game(int w, int h) {
-	// Create new OpenGL Window
-	std::unique_ptr<SDLHelper> SDLOGL_Helper(new SDLHelper("Test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h));
+Game::Game() {
 
+}
+
+Game::~Game() {
+	delete m_World;
+}
+
+bool Game::init(int w, int h) {
+	// Create new OpenGL Window
+	std::unique_ptr<SDLHelper> SDLOGL_Helper(new SDLHelper());
+	SDLOGL_Helper->init("3Pace", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, w, h);
+	
 	// Create new world
 	m_World = new World();
+	m_World->init();
 	resize(w, h);
 
 	m_Running = true;
@@ -18,13 +28,14 @@ Game::Game(int w, int h) {
 
 		m_World->process(SDLOGL_Helper->getDelta());
 
-		// Print error if existant
+		// Print error if existent
 		SDLOGL_Helper->printError();
-	}
-}
 
-Game::~Game() {
-	delete m_World;
+		// Swap display buffers
+		SDL_GL_SwapWindow(SDLOGL_Helper->getDisplayWindow());
+	}
+
+	return false;
 }
 
 void Game::handleEvents() {

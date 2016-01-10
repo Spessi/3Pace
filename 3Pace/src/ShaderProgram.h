@@ -7,8 +7,11 @@
 
 class ShaderProgram {
 public:
-	ShaderProgram(const std::vector<Shader>& shaders);
+	ShaderProgram();
 	~ShaderProgram();
+	bool compileProgram(const std::vector<Shader>& shaders);
+	void deleteProgram();
+	GLuint getUniformLoc(std::string name);
 	const GLuint getProgramID() const;
 private:
 	GLuint m_ProgramID;

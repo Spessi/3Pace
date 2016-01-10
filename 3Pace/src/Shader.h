@@ -8,8 +8,9 @@
 
 class Shader {
 public:
-	Shader(const std::string& path, GLenum shaderType);
+	Shader();
 	~Shader();
+	bool load(const std::string& path, GLenum shaderType);
 	const GLuint getShaderID() const;
 
 private:

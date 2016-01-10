@@ -1,64 +1,70 @@
 #include "SDLHelper.h"
 
-//constexpr SDL_GLprofile OPENGL_PROFILE = SDL_GLprofile::SDL_GL_CONTEXT_PROFILE_CORE;
 constexpr SDL_GLprofile OPENGL_PROFILE = SDL_GLprofile::SDL_GL_CONTEXT_PROFILE_COMPATIBILITY;
 
 
-SDLHelper::SDLHelper(std::string title, int x, int y, int w, int h) {
+SDLHelper::SDLHelper() {
+
+}
+
+bool SDLHelper::init(std::string title, int x, int y, int w, int h) {
 	m_FPS = 0.0f;
 	m_Delta = 0.0f;
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
-		throw std::runtime_error(std::string("Couldn't initialize SDL: ") + std::string(SDL_GetError()));
-	
+		return false;
+
 	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
-		throw std::runtime_error("Couldn't initialize SDL2 Image: " + std::string(SDL_GetError()));
+		return false;
 
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, OPENGL_PROFILE))
-		throw std::runtime_error("Couldn't set OpenGL profile mask: " + std::string(SDL_GetError()));
+		return false;
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3))
-		throw std::runtime_error("Couldn't set OpenGL major version: " + std::string(SDL_GetError()));
+		return false;
 	if (SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3))
-		throw std::runtime_error("Couldn't set OpenGL minor version: " + std::string(SDL_GetError()));
+		return false;
 
 	// Create Window
 	mDisplayWindow = SDL_CreateWindow(title.c_str(), x, y, w, h, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 	if (mDisplayWindow == nullptr)
-		throw std::runtime_error("Couldn't create window: " + std::string(SDL_GetError()));
+		return false;
 
 	// Get Window Context
 	mGlContext = SDL_GL_CreateContext(mDisplayWindow);
 	if (mGlContext == nullptr)
-		throw std::runtime_error("Couldn't create display context: " + std::string(SDL_GetError()));
+		return false;
 
 	// Initialize GLEW
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)
-		throw std::runtime_error("Couldn't initialize GLEW");
+		return false;
 
 	// Hack: glewExperimental _sometimes_ sets the error flag (0x500). Read glGetError() one time to discard this error
 	// https://www.opengl.org/wiki/OpenGL_Loading_Library#GLEW_.28OpenGL_Extension_Wrangler.29
 	glGetError();
 
+
 	// Mouse movement relative
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 
 	if (SDL_GL_SetSwapInterval(1) < 0)
-		throw std::runtime_error("Couldn't enable VSync");
-	GLenum err = GL_NO_ERROR;
-	if ((err = glGetError()) != GL_NO_ERROR)
-		std::cout << "ERROR: " << std::to_string(err) << std::endl;
-
-	glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+		return false;
 
 	initOpenGL();
+
+	return true;
 }
+
 void SDLHelper::initOpenGL() {
+	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 
 	// Cull triangles which normal is not towards the camera
-//	glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
+
+	// Set clear color to  black
+	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
 void SDLHelper::printError() {
@@ -66,7 +72,6 @@ void SDLHelper::printError() {
 	GLenum err = GL_NO_ERROR;
 	if ((err = glGetError()) != GL_NO_ERROR)
 		std::cout << "ERROR: " << std::to_string(err) << std::endl;
-	SDL_GL_SwapWindow(getDisplayWindow());
 }
 
 void SDLHelper::calcFPS() {

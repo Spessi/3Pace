@@ -22,8 +22,9 @@ struct Vertex {
 
 class SDLHelper {
 public:
-	SDLHelper(std::string title, int x, int y, int w, int h);
+	SDLHelper();
 	~SDLHelper();
+	bool init(std::string title, int x, int y, int w, int h);
 	SDL_Window* getDisplayWindow();
 	void printError();
 	void calcFPS();

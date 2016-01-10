@@ -11,10 +11,14 @@ public:
 	void draw();
 
 private:
+	int m_PixWidth;
+	int m_PixHeight;
 	GLuint m_VAO;
 	GLuint m_VerticesVBO;
 	GLuint m_IndicesVBO;
 	GLuint m_VerticesCount;
+
+	int getTriangleIndex(int x, int y);
 
 };
 

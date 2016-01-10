@@ -6,8 +6,9 @@
 
 class Game {
 public:
-	Game(int w, int h);
+	Game();
 	~Game();
+	bool init(int w, int h);
 	World* getWorld();
 
 private:

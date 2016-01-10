@@ -15,8 +15,8 @@ public:
 		RIGHT
 	};
 	Camera();
-	Camera(glm::vec3 pos, GLfloat horiAngle, GLfloat vertAngle, GLfloat farclip, GLfloat nearclip, GLfloat ratio, GLboolean constrainVertical = true, GLfloat movementSpeed = 1.0f, GLfloat mouseIntensity = 1.0f);
 	~Camera();
+	bool init(glm::vec3 pos, GLfloat horiAngle, GLfloat vertAngle, GLfloat nearclip, GLfloat farclip, GLfloat ratio, GLboolean constrainVertical = true, GLfloat movementSpeed = 1.0f, GLfloat mouseIntensity = 1.0f);
 	void setAspectRatio(GLfloat ratio);
 	glm::mat4 getProjectionMatrix();
 	glm::mat4 getViewMatrix() const;
