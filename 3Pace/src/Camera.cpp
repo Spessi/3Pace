@@ -46,7 +46,7 @@ void Camera::processKeyboard(GLfloat dt) {
 		m_Position += getRightVector() * speed;
 
 	if (state[SDL_SCANCODE_SPACE])
-		m_Position += getUpVector() * speed;
+		m_Position += glm::vec3(0.0f, 1.0f, 0.0f) * speed;
 }
 
 void Camera::processMouse(GLfloat dt) {
