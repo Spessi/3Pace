@@ -153,21 +153,47 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\CameraComponent.cpp" />
+    <ClCompile Include="src\CameraSystem.cpp" />
+    <ClCompile Include="src\Component.cpp" />
+    <ClCompile Include="src\EntityManager.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Heightmap.cpp" />
+    <ClCompile Include="src\InputSystem.cpp" />
+    <ClCompile Include="src\IntentComponent.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MeshComponent.cpp" />
+    <ClCompile Include="src\PhysicsSystem.cpp" />
+    <ClCompile Include="src\PositionComponent.cpp" />
+    <ClCompile Include="src\RenderSystem.cpp" />
     <ClCompile Include="src\SDLHelper.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\ShaderProgram.cpp" />
+    <ClCompile Include="src\System.cpp" />
+    <ClCompile Include="src\SystemManager.cpp" />
+    <ClCompile Include="src\VelocityComponent.cpp" />
     <ClCompile Include="src\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
+    <ClInclude Include="src\CameraComponent.h" />
+    <ClInclude Include="src\CameraSystem.h" />
+    <ClInclude Include="src\Component.h" />
+    <ClInclude Include="src\EntityManager.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\Heightmap.h" />
+    <ClInclude Include="src\InputSystem.h" />
+    <ClInclude Include="src\IntentComponent.h" />
+    <ClInclude Include="src\MeshComponent.h" />
+    <ClInclude Include="src\PhysicsSystem.h" />
+    <ClInclude Include="src\PositionComponent.h" />
+    <ClInclude Include="src\RenderSystem.h" />
     <ClInclude Include="src\SDLHelper.h" />
     <ClInclude Include="src\Shader.h" />
     <ClInclude Include="src\ShaderProgram.h" />
+    <ClInclude Include="src\System.h" />
+    <ClInclude Include="src\SystemManager.h" />
+    <ClInclude Include="src\VelocityComponent.h" />
     <ClInclude Include="src\World.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

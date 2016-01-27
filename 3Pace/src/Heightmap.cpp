@@ -185,8 +185,15 @@ bool Heightmap::loadFromFile(std::string path) {
 	return true;
 }
 
-void Heightmap::draw() {
+GLuint Heightmap::getVAO() {
+	return m_VAO;
+
+	/*
 	glBindVertexArray(m_VAO);
 	glDrawElements(GL_TRIANGLES, m_VerticesCount, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
+	glBindVertexArray(0);*/
+}
+
+GLuint Heightmap::getVerticesCount() {
+	return m_VerticesCount;
 }

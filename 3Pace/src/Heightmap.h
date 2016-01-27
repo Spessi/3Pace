@@ -8,7 +8,8 @@ public:
 	Heightmap();
 	~Heightmap();
 	bool Heightmap::loadFromFile(std::string path);
-	void draw();
+	GLuint getVAO();
+	GLuint getVerticesCount();
 
 private:
 	int m_PixWidth;

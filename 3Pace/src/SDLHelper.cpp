@@ -64,7 +64,7 @@ void SDLHelper::initOpenGL() {
 	glEnable(GL_CULL_FACE);
 
 	// Set clear color to  black
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
 }
 
 void SDLHelper::printError() {

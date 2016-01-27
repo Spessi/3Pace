@@ -13,6 +13,24 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Quelldateien\ecs">
+      <UniqueIdentifier>{9e8d4c38-c504-43bd-b0d8-a72ff9be6c77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\ecs">
+      <UniqueIdentifier>{1cafe220-62d4-4c65-bd3a-446e2f689753}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\ecs\component">
+      <UniqueIdentifier>{01c254dd-9b64-4509-8adf-b93081ac9056}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\ecs\component">
+      <UniqueIdentifier>{b483c184-868c-4a8b-b97d-504f7d3d4f4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\ecs\system">
+      <UniqueIdentifier>{0529527d-9887-4c3c-b6e7-41df0a6be1f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\ecs\system">
+      <UniqueIdentifier>{5d0519c2-f4f4-4ae0-a061-c5733bed7935}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -39,6 +57,45 @@
     <ClCompile Include="src\Heightmap.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="src\EntityManager.cpp">
+      <Filter>Quelldateien\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CameraComponent.cpp">
+      <Filter>Quelldateien\ecs\component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MeshComponent.cpp">
+      <Filter>Quelldateien\ecs\component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PositionComponent.cpp">
+      <Filter>Quelldateien\ecs\component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VelocityComponent.cpp">
+      <Filter>Quelldateien\ecs\component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsSystem.cpp">
+      <Filter>Quelldateien\ecs\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RenderSystem.cpp">
+      <Filter>Quelldateien\ecs\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CameraSystem.cpp">
+      <Filter>Quelldateien\ecs\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SystemManager.cpp">
+      <Filter>Quelldateien\ecs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\System.cpp">
+      <Filter>Quelldateien\ecs\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Component.cpp">
+      <Filter>Quelldateien\ecs\component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\InputSystem.cpp">
+      <Filter>Quelldateien\ecs\system</Filter>
+    </ClCompile>
+    <ClCompile Include="src\IntentComponent.cpp">
+      <Filter>Quelldateien\ecs\component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\SDLHelper.h">
@@ -61,6 +118,45 @@
     </ClInclude>
     <ClInclude Include="src\Heightmap.h">
       <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EntityManager.h">
+      <Filter>Headerdateien\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SystemManager.h">
+      <Filter>Headerdateien\ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CameraComponent.h">
+      <Filter>Headerdateien\ecs\component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CameraSystem.h">
+      <Filter>Headerdateien\ecs\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MeshComponent.h">
+      <Filter>Headerdateien\ecs\component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PositionComponent.h">
+      <Filter>Headerdateien\ecs\component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VelocityComponent.h">
+      <Filter>Headerdateien\ecs\component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RenderSystem.h">
+      <Filter>Headerdateien\ecs\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsSystem.h">
+      <Filter>Headerdateien\ecs\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Component.h">
+      <Filter>Headerdateien\ecs\component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\System.h">
+      <Filter>Headerdateien\ecs\system</Filter>
+    </ClInclude>
+    <ClInclude Include="src\IntentComponent.h">
+      <Filter>Headerdateien\ecs\component</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InputSystem.h">
+      <Filter>Headerdateien\ecs\system</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

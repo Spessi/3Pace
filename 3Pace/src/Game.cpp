@@ -62,7 +62,7 @@ void Game::handleEvents() {
 }
 
 void Game::resize(int w, int h) {
-	m_World->getCamera()->setAspectRatio((float)w / (float)h);
+//	m_World->getCamera()->setAspectRatio((float)w / (float)h);
 }
 
 World* Game::getWorld() {

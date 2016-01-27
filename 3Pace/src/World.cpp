@@ -5,13 +5,71 @@ World::World() {
 
 World::~World() {
 	delete m_ShaderProg;
-	delete m_Camera;
+}
+
+GLuint World::loadCube() {
+	GLuint gVAO = 0;
+	GLuint gVBO = 0;
+	GLuint gIVBO = 0;
+
+	// make and bind the VAO
+	glGenVertexArrays(1, &gVAO);
+	glBindVertexArray(gVAO);
+
+
+	// Put the three triangle verticies into the VBO
+	GLfloat vertexData[] = {
+		// Front
+		-1.0f, -1.0f, 1.0f,
+		1.0f, -1.0f, 1.0f,
+		1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, 1.0f,
+
+		// Top
+		1.0f, 1.0f, -1.0f,
+		-1.0f, 1.0f, -1.0f,
+
+	};
+
+	GLuint indexData[] = {
+		// Front
+		0, 2, 3, 
+		0, 1, 2,
+
+
+		// Top
+		3, 4, 5,
+		3, 2, 4,
+
+	};
+
+
+	// make and bind the VBO
+	glGenBuffers(1, &gVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, gVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData) * sizeof(GLfloat), vertexData, GL_STATIC_DRAW);
+	// connect the xyz to the "vert" attribute of the vertex shader
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	// Create Vertex Buffer Object for the indices and bind it
+	glGenBuffers(1, &gIVBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gIVBO);
+	// Upload the indices to the VBO
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexData) * sizeof(GLuint), &indexData, GL_STATIC_DRAW);
+
+
+	// unbind the VBO and VAO
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	return gVAO;
 }
 
 bool World::init() {
 	m_DrawWireframe = false;
 
-	
+
 	// Load all shaders
 	std::vector<Shader> shaders;
 	Shader shader;
@@ -20,19 +78,50 @@ bool World::init() {
 	shader.load("SimpleFragmentShader.glsl", GL_FRAGMENT_SHADER);
 	shaders.push_back(shader);
 
-
 	m_ShaderProg = new ShaderProgram();
 	m_ShaderProg->compileProgram(shaders);
 
 
+	m_EntityMgr = new EntityManager();
+	unsigned int id = -1;
 
-	m_Camera = new Camera();
-	// Set up the camera to position (0/20/0) with a movement speed of 30
-	m_Camera->init(glm::vec3(0.0f, 50.0f, 0.0f), 180.0f, 0.0f, 0.1f, 1000.0f, 16.0f / 9.0f, true, 30.0f, 5.0f);
+	std::cout << "Create Entity: " << (id = m_EntityMgr->createEntity()) << std::endl;
+	std::cout << "Add PositionComponent to Entity " << id << "!" << std::endl;
+	m_EntityMgr->addComponent(id, new PositionComponent(glm::vec3(0.0f, 30.0f, 00.0f)));
+	std::cout << "Add VelocityComponent to Entity " << id << "!" << std::endl;
+	m_EntityMgr->addComponent(id, new VelocityComponent(20.0));
+	std::cout << "Add MeshComponent to Entity " << id << "!" << std::endl;
+	m_EntityMgr->addComponent(id, new IntentComponent());
+	m_EntityMgr->addComponent(id, new MeshComponent(loadCube(), 12));
+
+	// Heightmap
+	Heightmap heightmap;
+	heightmap.loadFromFile("heightmap.png");
+	id = m_EntityMgr->createEntity();
+	m_EntityMgr->addComponent(id, new PositionComponent);
+	m_EntityMgr->addComponent(id, new MeshComponent(heightmap.getVAO(), heightmap.getVerticesCount()));
+
+
+	// CAMERA 1
+	std::cout << "Creating Camera..." << std::endl;
+	std::cout << "Create Entity: " << (id = m_EntityMgr->createEntity()) << std::endl;
+	std::cout << "Add PositionComponent to Entity " << id << "!" << std::endl;
+	m_EntityMgr->addComponent(id, new PositionComponent());
+	std::cout << "Add CameraComponent to Entity " << id << "!" << std::endl;
+	m_EntityMgr->addComponent(id, new CameraComponent(1));
+
+	 
+	m_SystemMgr = new SystemManager();
+	m_SystemMgr->registerSystem(new InputSystem());
+	m_SystemMgr->registerSystem(new PhysicsSystem());
+	m_CameraSystem = new CameraSystem(m_EntityMgr);
+	m_SystemMgr->registerSystem(m_CameraSystem);
+	m_SystemMgr->registerSystem(new RenderSystem(m_CameraSystem, m_ShaderProg));
+
+
 
 	m_Heightmap.loadFromFile("heightmap.png");
 	
-
 
 	// TODO: do some error testing
 	return true;
@@ -49,53 +138,87 @@ void World::process(GLfloat delta) {
 	if (state[SDL_SCANCODE_2])
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-	// Do camera movement
-	m_Camera->processKeyboard(m_Delta);
-	m_Camera->processMouse(m_Delta);
 
+	// Process Entity Component System
+	m_SystemMgr->process(m_EntityMgr->getEntities(), m_Delta);
+	//render();
+	return;
+	/*
+	// TODO: auslagern
+	{
+		if (m_CameraSystem->getActiveCamera() == nullptr)
+			return;
+		glm::mat4 modelMatrix;
+		// bind the program (the shaders)
+		glUseProgram(m_ShaderProg->getProgramID());	
+		// Transform light position (0/100/0) into ModelView space
+		glm::vec3 lightPos = glm::vec3(m_CameraSystem->getActiveCamera()->getViewMatrix() * modelMatrix * glm::vec4(0.0f, 100.0f, 0.0f, 1.0f));
+		glUniform3fv(m_ShaderProg->getUniformLoc("lightPos"), 1, glm::value_ptr(lightPos));
+
+
+		// Get the ModelViewProjection-PropertyID from the shader program
+		GLuint projectionLoc = glGetUniformLocation(m_ShaderProg->getProgramID(), "projection");
+		GLuint modelviewLoc = glGetUniformLocation(m_ShaderProg->getProgramID(), "modelview");
+
+		// Set projection matrix in shader
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(m_CameraSystem->getActiveCamera()->getProjectionMatrix()));
+	}
+
+
+
+	// TODO: auslagern
+	{
+		glUseProgram(0);
+	}*/
 
 	// Render
-	render();
+	//render();
 	// Render End
 }
 
 void World::render() {
 	glm::mat4 modelMatrix;
 	static float angle = 0.0f;
+	
 
 	// bind the program (the shaders)
 	glUseProgram(m_ShaderProg->getProgramID());
 
+
+
+
+	if (m_CameraSystem->getActiveCamera() == nullptr) {
+		return;
+	}
+
 	// Transform light position (0/100/0) into ModelView space
-	glm::vec3 lightPos = glm::vec3(m_Camera->getViewMatrix() * modelMatrix * glm::vec4(0.0f, 100.0f, 0.0f, 1.0f));
+	glm::vec3 lightPos = glm::vec3(m_CameraSystem->getActiveCamera()->getViewMatrix() * modelMatrix * glm::vec4(0.0f, 100.0f, 0.0f, 1.0f));
 	glUniform3fv(m_ShaderProg->getUniformLoc("lightPos"), 1, glm::value_ptr(lightPos));
+
 
 	// Get the ModelViewProjection-PropertyID from the shader program
 	GLuint projectionLoc = glGetUniformLocation(m_ShaderProg->getProgramID(), "projection");
 	GLuint modelviewLoc = glGetUniformLocation(m_ShaderProg->getProgramID(), "modelview");
 
 	// Set projection matrix in shader
-	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(m_Camera->getProjectionMatrix()));
+	glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(m_CameraSystem->getActiveCamera()->getProjectionMatrix()));
 
-	// Set ModelMatrix for heightmap to identity matrix (no translation/rotation/scale)
-	modelMatrix = glm::mat4();
+	// Render Heightmap
+	{
+		// Set ModelMatrix for heightmap to identity matrix (no translation/rotation/scale)
+		modelMatrix = glm::mat4();
+		// Set ModelView matrix in shader
+		glUniformMatrix4fv(modelviewLoc, 1, GL_FALSE, glm::value_ptr(m_CameraSystem->getActiveCamera()->getViewMatrix() * modelMatrix));
+		// Set heightmap color
+		glUniform3fv(m_ShaderProg->getUniformLoc("objectColor"), 1, glm::value_ptr(glm::vec3(0.12f, 0.32f, 0.0f)));
+		// Draw heightmap
+		//m_Heightmap.draw();
+	}
 
-	// Set ModelView matrix in shader
-	glUniformMatrix4fv(modelviewLoc, 1, GL_FALSE, glm::value_ptr(m_Camera->getViewMatrix() * modelMatrix));
-
-	// Set heightmap color
-	glUniform3fv(m_ShaderProg->getUniformLoc("objectColor"), 1, glm::value_ptr(glm::vec3(0.12f, 0.32f, 0.0f)));
-
-	// Draw heightmap
-	m_Heightmap.draw();
 
 	glUseProgram(0);
 }
 
 const ShaderProgram* World::getShaderProg() const {
 	return m_ShaderProg;
-}
-
-Camera* World::getCamera() {
-	return m_Camera;
 }
