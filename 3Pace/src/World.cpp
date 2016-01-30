@@ -17,30 +17,77 @@ GLuint World::loadCube() {
 	glBindVertexArray(gVAO);
 
 
-	// Put the three triangle verticies into the VBO
+	// Put the three triangle verticies into the VBO (3*float Vertex, 3* float Normal)
 	GLfloat vertexData[] = {
+		// Bottom
+		-5.0f, -5.0f, 5.0f,
+		0.0f, -1.0f, 0.0f,
+		5.0f, -5.0f, 5.0f,
+		0.0f, -1.0f, 0.0f,
+		5.0f, -5.0f, -5.0f,
+		0.0f, -1.0f, 0.0f,
+		-5.0f, -5.0f, -5.0f,
+		0.0f, -1.0f, 0.0f,
+
+		// Back
+		-5.0f, 5.0f, 5.0f,
+		0.0f, 0.0f, 1.0f,
+		5.0f, 5.0f, 5.0f,
+		0.0f, 0.0f, 1.0f,
+
 		// Front
-		-1.0f, -1.0f, 1.0f,
-		1.0f, -1.0f, 1.0f,
-		1.0f, 1.0f, 1.0f,
-		-1.0f, 1.0f, 1.0f,
+		-5.0f, 5.0f, -5.0f,
+		0.0f, 0.0f, -1.0f,
+		5.0f, 5.0f, -5.0f,
+		0.0f, 0.0f, -1.0f,
+
+		// Left
+		-5.0f, 5.0f, 5.0f,
+		-1.0f, 0.0f, 0.0f,
+		-5.0f, 5.0f, -5.0f,
+		-1.0f, 0.0f, 0.0f,
+
+		// Right
+		5.0f, 5.0f, 5.0f,
+		1.0f, 0.0f, 0.0f,
+		5.0f, 5.0f, -5.0f,
+		1.0f, 0.0f, 0.0f,
 
 		// Top
-		1.0f, 1.0f, -1.0f,
-		-1.0f, 1.0f, -1.0f,
-
+		-5.0f, 5.0f, -5.0f,
+		0.0f, 1.0f, 0.0f,
+		5.0f, 5.0f, -5.0f,
+		0.0f, 1.0f, 0.0f,
+		5.0f, 5.0f, 5.0f,
+		0.0f, 1.0f, 0.0f,
+		-5.0f, 5.0f, 5.0f,
+		0.0f, 1.0f, 0.0f,
 	};
 
 	GLuint indexData[] = {
-		// Front
-		0, 2, 3, 
+		// Bottom
+		0, 2, 3,
 		0, 1, 2,
 
+		// Back
+		0, 1, 4,
+		1, 5, 4,
+
+		// Front
+		3, 6, 7,
+		3, 7, 2,
+
+		// Left
+		3, 8, 9,
+		3, 0, 8,
+
+		// Right
+		1, 2, 11,
+		1, 11, 10,
 
 		// Top
-		3, 4, 5,
-		3, 2, 4,
-
+		12, 15, 14,
+		12, 14, 13,
 	};
 
 
@@ -49,14 +96,19 @@ GLuint World::loadCube() {
 	glBindBuffer(GL_ARRAY_BUFFER, gVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData) * sizeof(GLfloat), vertexData, GL_STATIC_DRAW);
 	// connect the xyz to the "vert" attribute of the vertex shader
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	// Load normals
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
 
 	// Create Vertex Buffer Object for the indices and bind it
 	glGenBuffers(1, &gIVBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, gIVBO);
 	// Upload the indices to the VBO
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexData) * sizeof(GLuint), &indexData, GL_STATIC_DRAW);
+
 
 
 	// unbind the VBO and VAO
@@ -87,28 +139,28 @@ bool World::init() {
 
 	std::cout << "Create Entity: " << (id = m_EntityMgr->createEntity()) << std::endl;
 	std::cout << "Add PositionComponent to Entity " << id << "!" << std::endl;
-	m_EntityMgr->addComponent(id, new PositionComponent(glm::vec3(0.0f, 30.0f, 00.0f)));
+	m_EntityMgr->addComponent(id, new PositionComponent(glm::vec3(0.0f, 45.0f, 00.0f)));
 	std::cout << "Add VelocityComponent to Entity " << id << "!" << std::endl;
-	m_EntityMgr->addComponent(id, new VelocityComponent(20.0));
+	m_EntityMgr->addComponent(id, new VelocityComponent(20.0, 120.0f));
 	std::cout << "Add MeshComponent to Entity " << id << "!" << std::endl;
 	m_EntityMgr->addComponent(id, new IntentComponent());
-	m_EntityMgr->addComponent(id, new MeshComponent(loadCube(), 12));
+	m_EntityMgr->addComponent(id, new MeshComponent(loadCube(), 36, glm::vec3(0.26f, 0.82f, 0.2f)));
 
 	// Heightmap
 	Heightmap heightmap;
 	heightmap.loadFromFile("heightmap.png");
 	id = m_EntityMgr->createEntity();
 	m_EntityMgr->addComponent(id, new PositionComponent);
-	m_EntityMgr->addComponent(id, new MeshComponent(heightmap.getVAO(), heightmap.getVerticesCount()));
+	m_EntityMgr->addComponent(id, new MeshComponent(heightmap.getVAO(), heightmap.getVerticesCount(), glm::vec3(0.46f, 0.32f, 0.2f)));
 
 
 	// CAMERA 1
 	std::cout << "Creating Camera..." << std::endl;
 	std::cout << "Create Entity: " << (id = m_EntityMgr->createEntity()) << std::endl;
 	std::cout << "Add PositionComponent to Entity " << id << "!" << std::endl;
-	m_EntityMgr->addComponent(id, new PositionComponent());
+	m_EntityMgr->addComponent(id, new PositionComponent(glm::vec3(0.0f, 45.0f, 15.0f)));
 	std::cout << "Add CameraComponent to Entity " << id << "!" << std::endl;
-	m_EntityMgr->addComponent(id, new CameraComponent(1));
+	m_EntityMgr->addComponent(id, new CameraComponent());
 
 	 
 	m_SystemMgr = new SystemManager();

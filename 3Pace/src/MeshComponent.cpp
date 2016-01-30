@@ -1,9 +1,9 @@
 #include "MeshComponent.h"
 
-MeshComponent::MeshComponent(GLuint vao, GLuint verticesCount) {
+MeshComponent::MeshComponent(GLuint vao, GLuint verticesCount, glm::vec3 color) {
 	m_VAO = vao;
 	m_VerticesCount = verticesCount;
-	m_Color = glm::vec3(0.46f, 0.32f, 0.2f);
+	m_Color = color;
 }
 
 

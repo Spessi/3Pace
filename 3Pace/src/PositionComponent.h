@@ -23,6 +23,9 @@ public:
 	void setScale(glm::vec3 sca);
 	void setHorizontalAngle(float angle);
 	void setVerticalAngle(float angle);
+
+	bool getIsInAir();
+	void setIsInAir(bool state);
 	
 
 private:
@@ -32,5 +35,7 @@ private:
 	float m_HorizontalAngle;
 	float m_VerticalAngle;
 	glm::vec3 m_Scale;
+
+	bool m_IsInAir;
 };
 

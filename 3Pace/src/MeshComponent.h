@@ -6,7 +6,7 @@
 
 class MeshComponent : public Component {
 public:
-	MeshComponent(GLuint vao, GLuint verticesCount);
+	MeshComponent(GLuint vao, GLuint verticesCount, glm::vec3 color);
 	~MeshComponent();
 	ComponentBitID getID();
 	GLuint getVAO();

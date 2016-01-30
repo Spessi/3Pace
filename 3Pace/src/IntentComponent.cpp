@@ -4,8 +4,8 @@
 IntentComponent::IntentComponent() {
 	m_MoveForward = false;
 	m_MoveBackward = false;
-	m_MoveLeft = false;
-	m_MoveRight = false;
+	m_TurnLeft = false;
+	m_TurnRight = false;
 	m_RotateHorizontalDelta = 0.0f;
 	m_RotateVerticalDelta = 0.0f;
 }
@@ -32,20 +32,26 @@ void IntentComponent::setMoveBackward(bool state) {
 	m_MoveBackward = state;
 }
 
-bool IntentComponent::getMoveLeft() {
-	return m_MoveLeft;
+bool IntentComponent::getTurnLeft() {
+	return m_TurnLeft;
 }
-void IntentComponent::setMoveLeft(bool state) {
-	m_MoveLeft = state;
-}
-
-bool IntentComponent::getMoveRight() {
-	return m_MoveRight;
-}
-void IntentComponent::setMoveRight(bool state) {
-	m_MoveRight = state;
+void IntentComponent::setTurnLeft(bool state) {
+	m_TurnLeft = state;
 }
 
+bool IntentComponent::getTurnRight() {
+	return m_TurnRight;
+}
+void IntentComponent::setTurnRight(bool state) {
+	m_TurnRight = state;
+}
+
+bool IntentComponent::getJump() {
+	return m_Jump;
+}
+void IntentComponent::setJump(bool state) {
+	m_Jump = state;
+}
 
 /* Rotate */
 float IntentComponent::getRotateHorizontalDelta() {

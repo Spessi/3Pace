@@ -37,7 +37,7 @@ void CameraSystem::process(ComponentBag bag, float dt) {
 	}
 	else {
 		// If it has no target entity, use the camera entities' position
-		//camComp->setViewMatrix(glm::lookAt(posComp->getPosition(), posComp->getPosition() + posComp->getFrontVector(), glm::vec3(0.0f, 1.0f, 0.0f)));
+		camComp->setViewMatrix(glm::lookAt(posComp->getPosition(), posComp->getPosition() + posComp->getFrontVector(), glm::vec3(0.0f, 1.0f, 0.0f)));
 	}
 }
 

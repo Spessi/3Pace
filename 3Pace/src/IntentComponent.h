@@ -15,11 +15,14 @@ public:
 	bool getMoveBackward();
 	void setMoveBackward(bool state);
 
-	bool getMoveLeft();
-	void setMoveLeft(bool state);
+	bool getTurnLeft();
+	void setTurnLeft(bool state);
 
-	bool getMoveRight();
-	void setMoveRight(bool state);
+	bool getTurnRight();
+	void setTurnRight(bool state);
+
+	bool getJump();
+	void setJump(bool state);
 
 	float getRotateHorizontalDelta();
 	void setRotateHorizontalDelta(float dx);
@@ -30,8 +33,9 @@ public:
 private:
 	bool m_MoveForward;
 	bool m_MoveBackward;
-	bool m_MoveLeft;
-	bool m_MoveRight;
+	bool m_TurnLeft;
+	bool m_TurnRight;
+	bool m_Jump;
 	float m_RotateHorizontalDelta;
 	float m_RotateVerticalDelta;
 };

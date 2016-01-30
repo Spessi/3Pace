@@ -7,13 +7,26 @@
 class VelocityComponent : public Component {
 public:
 	VelocityComponent();
-	VelocityComponent(float velo);
+	VelocityComponent(float moveMax, float rotationMax);
 	~VelocityComponent();
 	ComponentBitID getID();
 
-	float getVelocity();
-	void setVelocity(float velocity);
+	float getMoveSpeed();
+	void setMoveSpeed(float velocity);
+	float getMoveSpeedMax();
+
+	float getRotationSpeed();
+	void setRotationSpeed(float velocity);
+	float getRotationSpeedMax();
+
+	float getUpwardSpeed();
+	void setUpwardSpeed(float velocity);
+
 private:
-	float m_Velocity;
+	float m_moveSpeed;
+	float m_moveSpeedMax;
+	float m_rotationSpeed;
+	float m_rotationSpeedMax;
+	float m_upwardSpeed;
 };
 

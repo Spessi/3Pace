@@ -17,17 +17,17 @@ std::shared_ptr<Component> System::getComponentFromBag(ComponentBag& bag, Compon
 	return bag.at(m_ComponentIDs.at(id));
 }
 
+/*
+* Check if the Components in the bag matches with the System's Components
+* Returns true if the bag matches to the system, otherwise false
+*/
 bool System::componentCheck(ComponentBag& bag) {
 	if (m_ComponentIDs.empty())
 		return false;
 
 	for (auto& id : m_ComponentIDs) {
-		try {
-			bag.at(id.second);
-		}
-		catch (const std::out_of_range&) {
+		if (bag.find(id.second) == bag.end())
 			return false;
-		}
 	}
 
 	return true;

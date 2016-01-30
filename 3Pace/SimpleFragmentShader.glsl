@@ -10,7 +10,7 @@ void main() {
 	vec3 lightColor = vec3(1.0, 1.0, 1.0);
 	
 	// Ambient
-	float ambientStrength = 0.2f;
+	float ambientStrength = 0.1f;
 	vec3 ambient = ambientStrength * lightColor;
 	
 	// Diffuse

@@ -47,6 +47,7 @@ void InputSystem::process(ComponentBag bag, float dt) {
 		intentComp->setMoveForward(state[SDL_SCANCODE_W]);
 
 	intentComp->setMoveBackward(state[SDL_SCANCODE_S]);
-	intentComp->setMoveLeft(state[SDL_SCANCODE_A]);
-	intentComp->setMoveRight(state[SDL_SCANCODE_D]);
+	intentComp->setTurnLeft(state[SDL_SCANCODE_A]);
+	intentComp->setTurnRight(state[SDL_SCANCODE_D]);
+	intentComp->setJump(state[SDL_SCANCODE_SPACE]);
 }

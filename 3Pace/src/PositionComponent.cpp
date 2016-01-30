@@ -66,3 +66,11 @@ void PositionComponent::setVerticalAngle(float angle) {
 void PositionComponent::setScale(glm::vec3 sca) {
 	m_Scale = sca;
 }
+
+bool PositionComponent::getIsInAir() {
+	return m_IsInAir;
+}
+
+void PositionComponent::setIsInAir(bool state) {
+	m_IsInAir = state;
+}
